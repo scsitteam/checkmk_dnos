@@ -29,9 +29,9 @@
 
 from typing import Optional
 
-from .agent_based_api.v1 import exists, register, SNMPTree
-from .agent_based_api.v1.type_defs import StringTable
-from .utils.cpu import Load, Section
+from cmk.base.plugins.agent_based.agent_based_api.v1 import exists, register, SNMPTree
+from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTable
+from cmk.base.plugins.agent_based.utils.cpu import Load, Section
 
 
 def parse_dnos_cpu(string_table: StringTable) -> Optional[Section]:

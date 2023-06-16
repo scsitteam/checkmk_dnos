@@ -27,13 +27,13 @@
 
 from typing import Optional
 
-from .agent_based_api.v1 import (
+from cmk.base.plugins.agent_based.agent_based_api.v1 import (
     exists,
     register,
     SNMPTree,
 )
-from .agent_based_api.v1.type_defs import StringTable
-from .utils.memory import SectionMemUsed
+from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTable
+from cmk.base.plugins.agent_based.utils.memory import SectionMemUsed
 
 
 def parse_dnos_mem(string_table: StringTable) -> Optional[SectionMemUsed]:
