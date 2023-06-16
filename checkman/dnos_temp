@@ -1,7 +1,7 @@
 title: Dell Networking OS Switches: Temperature Sensors
 agents: snmp
 catalog: hw/network/dnos
-license: GPLv2
+license: GPLv3
 distribution: scsitteam
 description:
  This check monitors the temperature sensors on Dell Networking OS Switches.
