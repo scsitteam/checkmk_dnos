@@ -55,7 +55,7 @@ def parse_dnos_temp(string_table: StringTable) -> Optional[dict]:
     if not string_table:
         return None
 
-    return {f"{s[0]}:{s[1]}": (int(s[3]), DevStatusMap.get(s[2], (State.UNKNOWN, 'unknown'))) for s in string_table}
+    return {f"Unit {s[0]} Sensor {s[1]}": (int(s[3]), DevStatusMap.get(s[2], (State.UNKNOWN, 'unknown'))) for s in string_table}
 
 
 register.snmp_section(

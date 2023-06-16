@@ -36,8 +36,8 @@ def get_value_store():
 
 @pytest.mark.parametrize('string_table, result', [
     ([], None),
-    ([['1', '0', '1', '34']], {"1:0": (34, (State.OK, 'normal'))}),
-    ([['1', '0', '1', '34'], ['2', '1', '2', '35']], {"1:0": (34, (State.OK, 'normal')), "2:1": (35, (State.WARN, 'warning'))}),
+    ([['1', '0', '1', '34']], {"Unit 1 Sensor 0": (34, (State.OK, 'normal'))}),
+    ([['1', '0', '1', '34'], ['2', '1', '2', '35']], {"Unit 1 Sensor 0": (34, (State.OK, 'normal')), "Unit 2 Sensor 1": (35, (State.WARN, 'warning'))}),
 ])
 def test_parse_dnos_temp(string_table, result):
     assert dnos_temp.parse_dnos_temp(string_table) == result
@@ -45,7 +45,7 @@ def test_parse_dnos_temp(string_table, result):
 
 @pytest.mark.parametrize('section, result', [
     ({}, []),
-    ({"1:0": (34, 1)}, [Service(item='1:0')]),
+    ({"Unit 1 Sensor 0": (34, 1)}, [Service(item='Unit 1 Sensor 0')]),
 ])
 def test_discovery_phion_service(section, result):
     assert list(dnos_temp.discovery_dnos_temp(section)) == result
@@ -53,11 +53,11 @@ def test_discovery_phion_service(section, result):
 
 @pytest.mark.parametrize('item, params, section, result', [
     (
-        'FOO', {}, {"1:0": (34, (State.OK, 'normal')), "2:1": (35, (State.WARN, 'warning'))},
+        'FOO', {}, {"Unit 1 Sensor 0": (34, (State.OK, 'normal')), "Unit 2 Sensor 1": (35, (State.WARN, 'warning'))},
         []
     ),
     (
-        '1:0', {}, {"1:0": (34, (State.OK, 'normal')), "2:1": (35, (State.WARN, 'warning'))},
+        'Unit 1 Sensor 0', {}, {"Unit 1 Sensor 0": (34, (State.OK, 'normal')), "Unit 2 Sensor 1": (35, (State.WARN, 'warning'))},
         [
             Metric('temp', 34.0),
             Result(state=State.OK, summary='Temperature: 34 °C'),
@@ -65,7 +65,7 @@ def test_discovery_phion_service(section, result):
         ]
     ),
     (
-        '2:1', {}, {"1:0": (34, (State.OK, 'normal')), "2:1": (35, (State.WARN, 'warning'))},
+        'Unit 2 Sensor 1', {}, {"Unit 1 Sensor 0": (34, (State.OK, 'normal')), "Unit 2 Sensor 1": (35, (State.WARN, 'warning'))},
         [
             Metric('temp', 35.0),
             Result(state=State.OK, summary='Temperature: 35 °C'),
@@ -73,7 +73,7 @@ def test_discovery_phion_service(section, result):
         ]
     ),
     (
-        '2:1', {"device_levels_handling": "worst"}, {"1:0": (34, (State.OK, 'normal')), "2:1": (35, (State.WARN, 'warning'))},
+        'Unit 2 Sensor 1', {"device_levels_handling": "worst"}, {"Unit 1 Sensor 0": (34, (State.OK, 'normal')), "Unit 2 Sensor 1": (35, (State.WARN, 'warning'))},
         [
             Metric('temp', 35.0),
             Result(state=State.OK, summary='Temperature: 35 °C'),
@@ -82,7 +82,7 @@ def test_discovery_phion_service(section, result):
         ]
     ),
     (
-        '1:0', {'levels': (30, 40), 'levels_lower': (10, 5)}, {"1:0": (34, (State.OK, 'normal')), "2:1": (35, (State.WARN, 'warning'))},
+        'Unit 1 Sensor 0', {'levels': (30, 40), 'levels_lower': (10, 5)}, {"Unit 1 Sensor 0": (34, (State.OK, 'normal')), "Unit 2 Sensor 1": (35, (State.WARN, 'warning'))},
         [
             Metric('temp', 34.0, levels=(30.0, 40.0,)),
             Result(state=State.WARN, summary='Temperature: 34 °C (warn/crit at 30 °C/40 °C)'),
@@ -90,7 +90,7 @@ def test_discovery_phion_service(section, result):
         ]
     ),
     (
-        '1:0', {'levels': (30, 40), 'levels_lower': (10, 5), "device_levels_handling": "worst"}, {"1:0": (34, (State.OK, 'normal')), "2:1": (35, (State.WARN, 'warning'))},
+        'Unit 1 Sensor 0', {'levels': (30, 40), 'levels_lower': (10, 5), "device_levels_handling": "worst"}, {"Unit 1 Sensor 0": (34, (State.OK, 'normal')), "Unit 2 Sensor 1": (35, (State.WARN, 'warning'))},
         [
             Metric('temp', 34.0, levels=(30.0, 40.0,)),
             Result(state=State.WARN, summary='Temperature: 34 °C (warn/crit at 30 °C/40 °C)'),
