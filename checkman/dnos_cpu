@@ -2,7 +2,7 @@ title: Dell Networking OS Switches: CPU Utilization
 agents: snmp
 catalog: hw/network/dnos
 license: GPLv2
-distribution: check_mk
+distribution: scsitteam
 description:
  This check monitors the CPU utilization on Dell Networking OS Switches.
 

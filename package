@@ -4,11 +4,15 @@
     'download_url': 'https://github.com/scsitteam/checkmk_dnos',
     'files': {
         'agent_based': [
-            'dnos_cpu.py'
+            'dnos_cpu.py',
+            'dnos_mem.py',
+            'dnos_temp.py',
         ],
         'agents': [],
         'checkman': [
-            'dnos_cpu'
+            'dnos_cpu',
+            'dnos_mem',
+            'dnos_temp',
         ],
         'checks': [],
         'doc': [],
