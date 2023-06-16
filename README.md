@@ -1,12 +1,16 @@
-# Checkmk extension for ...
+# Checkmk extension for Dell Networking Operating System Switches
 
-![build](https://github.com/jiuka/checkmk_phion/workflows/build/badge.svg)
-![flake8](https://github.com/jiuka/checkmk_phion/workflows/Lint/badge.svg)
-![pytest](https://github.com/jiuka/checkmk_phion/workflows/pytest/badge.svg)
+![build](https://github.com/scsitteam/checkmk_dnos/workflows/build/badge.svg)
+![flake8](https://github.com/scsitteam/checkmk_dnos/workflows/Lint/badge.svg)
+![pytest](https://github.com/scsitteam/checkmk_dnos/workflows/pytest/badge.svg)
 
 ## Description
 
-This is a template to develop Checkmk Extensions
+Checkmk Extension to monitor Dell Networking Operating System Switches by SNMP.
+
+ * dnos_cpu - Checks CPU load
+ * dnos_mem - Checks memory usage
+ * dnos_temp - Checks temperature sensors
 
 ## Development
 
