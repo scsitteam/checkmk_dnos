@@ -1,0 +1,12 @@
+title: Dell Networking OS Switches: Memory Utilization
+agents: snmp
+catalog: hw/network/dnos
+license: GPLv2
+distribution: scsitteam
+description:
+ This check monitors the memory utilization on Dell Networking OS Switches.
+
+ The check uses the DNOS-SWITCHING-MIB.
+
+discovery:
+ One service is created
