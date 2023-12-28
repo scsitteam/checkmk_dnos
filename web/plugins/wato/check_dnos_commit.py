@@ -20,7 +20,6 @@ from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Dictionary,
     TextAscii,
-    Password,
 )
 from cmk.gui.plugins.wato import (
     rulespec_registry,
