@@ -27,13 +27,14 @@
 
 from cmk.base.plugins.agent_based.agent_based_api.v1 import exists, register, SNMPTree, HostLabel
 from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTable, HostLabelGenerator
-from cmk.base.plugins.agent_based.utils.cpu import Load, Section
+
 
 def parse_dnos_agentinventory(string_table: StringTable) -> dict:
     return dict(
         model=string_table[0][0],
         version=string_table[0][1],
     )
+
 
 def host_label_dnos_agentinventory(section: dict) -> HostLabelGenerator:
     yield HostLabel("dnos/model", section['model'])
