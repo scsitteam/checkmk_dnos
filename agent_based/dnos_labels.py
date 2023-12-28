@@ -30,6 +30,8 @@ from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTabl
 
 
 def parse_dnos_agentinventory(string_table: StringTable) -> dict:
+    if not string_table:
+        return None
     return dict(
         model=string_table[0][0],
         version=string_table[0][1],
