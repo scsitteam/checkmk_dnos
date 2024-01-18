@@ -74,14 +74,16 @@ register.snmp_section(
     detect=startswith(".1.3.6.1.2.1.1.2.0", ".1.3.6.1.4.1.674.10895.")
 )
 
+
 def parse_dnos10_temp(string_table: List[StringTable]) -> Optional[dict]:
     if not string_table:
         return None
-    
+
     temp = {f"Chassis {s[0]}": int(s[1]) for s in string_table[0]}
     temp.update({f"Card {s[0]}": int(s[1]) for s in string_table[1]})
 
     return temp
+
 
 register.snmp_section(
     name = "dnos10_temp",

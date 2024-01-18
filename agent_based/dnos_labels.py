@@ -60,10 +60,11 @@ register.snmp_section(
     detect=exists(".1.3.6.1.4.1.674.10895.5000.2.6132.1.1.1.1.1.3.0"),
 )
 
+
 def parse_dnos10_agentinventory(string_table: List[StringTable]) -> Optional[dict]:
     if not string_table:
         return None
-    
+
     imageVersions = dict(string_table[1])
     cardType = dict(string_table[3])
 
