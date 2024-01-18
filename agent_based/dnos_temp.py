@@ -28,10 +28,11 @@
 # DNOS-BOXSERVICES-PRIVATE-MIB::boxServicesTempSensorTemperature.1.0 = INTEGER: 34
 
 
-from typing import Optional
+from typing import Optional, List
 
 from cmk.base.plugins.agent_based.agent_based_api.v1 import (
     get_value_store,
+    OIDEnd,
     register,
     Service,
     SNMPTree,
@@ -73,6 +74,37 @@ register.snmp_section(
     detect=startswith(".1.3.6.1.2.1.1.2.0", ".1.3.6.1.4.1.674.10895.")
 )
 
+def parse_dnos10_temp(string_table: List[StringTable]) -> Optional[dict]:
+    if not string_table:
+        return None
+    
+    temp = {f"Chassis {s[0]}": int(s[1]) for s in string_table[0]}
+    temp.update({f"Card {s[0]}": int(s[1]) for s in string_table[1]})
+
+    return temp
+
+register.snmp_section(
+    name = "dnos10_temp",
+    parse_function=parse_dnos10_temp,
+    fetch = [
+        SNMPTree(
+            base = '.1.3.6.1.4.1.674.11000.5000.100.4.1.1.3.1',
+            oids = [
+                OIDEnd(),
+                '11',  # DELLEMC-OS10-CHASSIS-MIB::os10ChassisTemp
+            ],
+        ),
+        SNMPTree(
+            base = '.1.3.6.1.4.1.674.11000.5000.100.4.1.1.4.1',
+            oids = [
+                OIDEnd(),
+                '5',  # DELLEMC-OS10-CHASSIS-MIB::os10CardTemp
+            ],
+        ),
+    ],
+    detect=startswith(".1.3.6.1.2.1.1.2.0", ".1.3.6.1.4.1.674.11000.5000.100")
+)
+
 
 def discovery_dnos_temp(section: dict) -> DiscoveryResult:
     for sensor in section.keys():
@@ -97,6 +129,27 @@ register.check_plugin(
     service_name="Temperature %s",
     discovery_function=discovery_dnos_temp,
     check_function=check_dnos_temp,
+    check_default_parameters={"levels": (80.0, 90.0), "device_levels_handling": "worst"},
+    check_ruleset_name="temperature",
+)
+
+
+def check_dnos10_temp(item: str, params: TempParamType, section: dict):
+    if item not in section:
+        return
+    yield from check_temperature(
+        reading=section[item],
+        params=params,
+        unique_name=item,
+        value_store=get_value_store(),
+    )
+
+
+register.check_plugin(
+    name="dnos10_temp",
+    service_name="Temperature %s",
+    discovery_function=discovery_dnos_temp,
+    check_function=check_dnos10_temp,
     check_default_parameters={"levels": (80.0, 90.0), "device_levels_handling": "worst"},
     check_ruleset_name="temperature",
 )
