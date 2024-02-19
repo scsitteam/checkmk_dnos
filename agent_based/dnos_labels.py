@@ -25,7 +25,9 @@
 # DNOS-SWITCHING-MIB::agentInventorySoftwareVersion.0 = STRING: "6.7.1.17"
 
 
-from cmk.base.plugins.agent_based.agent_based_api.v1 import exists, register, SNMPTree, HostLabel
+from typing import Optional, List
+
+from cmk.base.plugins.agent_based.agent_based_api.v1 import exists, register, startswith, SNMPTree, HostLabel
 from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTable, HostLabelGenerator
 
 
@@ -56,4 +58,53 @@ register.snmp_section(
         ],
     ),
     detect=exists(".1.3.6.1.4.1.674.10895.5000.2.6132.1.1.1.1.1.3.0"),
+)
+
+
+def parse_dnos10_agentinventory(string_table: List[StringTable]) -> Optional[dict]:
+    if not string_table:
+        return None
+
+    imageVersions = dict(string_table[1])
+    cardType = dict(string_table[3])
+
+    return dict(
+        model=cardType[string_table[2][0][0]].split(' ', 1)[0],
+        version=imageVersions[string_table[0][0][0]],
+    )
+
+
+register.snmp_section(
+    name = "dnos10_agentinventory",
+    parse_function=parse_dnos10_agentinventory,
+    host_label_function=host_label_dnos_agentinventory,
+    fetch = [
+        SNMPTree(
+            base = '.1.3.6.1.4.1.674.11000.5000.100.4.1.2.4',
+            oids = [
+                '0',   # DELLEMC-OS10-CHASSIS-MIB::os10SwModuleCurrentBootSource
+            ],
+        ),
+        SNMPTree(
+            base = '.1.3.6.1.4.1.674.11000.5000.100.4.1.2.6.1',
+            oids = [
+                '1',   # DELLEMC-OS10-CHASSIS-MIB::os10SwModuleIndex
+                '2',   # DELLEMC-OS10-CHASSIS-MIB::os10SwModuleImgVers
+            ],
+        ),
+        SNMPTree(
+            base = '.1.3.6.1.4.1.674.11000.5000.100.4.1.1.3.1.2',
+            oids = [
+                '1',   # DELLEMC-OS10-CHASSIS-MIB::os10ChassisType
+            ],
+        ),
+        SNMPTree(
+            base = '.1.3.6.1.4.1.674.11000.5000.100.4.1.1.4.1',
+            oids = [
+                '2',   # DELLEMC-OS10-CHASSIS-MIB::os10CardType
+                '3',   # DELLEMC-OS10-CHASSIS-MIB::os10CardDescription
+            ],
+        ),
+    ],
+    detect=startswith(".1.3.6.1.2.1.1.2.0", ".1.3.6.1.4.1.674.11000.5000.100")
 )
