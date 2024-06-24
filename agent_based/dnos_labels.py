@@ -3,7 +3,7 @@
 #
 # dnos_labels - Dell Networking OS Host labels
 #
-# Copyright (C) 2023  Marius Rieder <marius.rieder@scs.ch>
+# Copyright (C) 2023-2024  Marius Rieder <marius.rieder@scs.ch>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,8 +27,16 @@
 
 from typing import Optional, List
 
-from cmk.base.plugins.agent_based.agent_based_api.v1 import exists, register, startswith, SNMPTree, HostLabel
-from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTable, HostLabelGenerator
+from cmk.agent_based.v2 import (
+    exists,
+    HostLabel,
+    HostLabelGenerator,
+    SimpleSNMPSection,
+    SNMPSection,
+    SNMPTree,
+    startswith,
+    StringTable,
+)
 
 
 def parse_dnos_agentinventory(string_table: StringTable) -> dict:
@@ -46,7 +54,7 @@ def host_label_dnos_agentinventory(section: dict) -> HostLabelGenerator:
     yield HostLabel("dnos/major", section['version'].split('.')[0])
 
 
-register.snmp_section(
+snmp_section_dnos_agentinventory = SimpleSNMPSection(
     name = "dnos_agentinventory",
     parse_function=parse_dnos_agentinventory,
     host_label_function=host_label_dnos_agentinventory,
@@ -74,7 +82,7 @@ def parse_dnos10_agentinventory(string_table: List[StringTable]) -> Optional[dic
     )
 
 
-register.snmp_section(
+snmp_section_dnos10_agentinventory = SNMPSection(
     name = "dnos10_agentinventory",
     parse_function=parse_dnos10_agentinventory,
     host_label_function=host_label_dnos_agentinventory,

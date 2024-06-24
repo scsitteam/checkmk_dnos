@@ -3,7 +3,7 @@
 #
 # Dell OS6 Check for Checkmk
 #
-# Copyright (C) 2023  Marius Rieder <marius.rieder@scs.ch>
+# Copyright (C) 2023-2024  Marius Rieder <marius.rieder@scs.ch>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 #
 
 import pytest  # type: ignore[import]
-from cmk.base.plugins.agent_based.agent_based_api.v1 import (
+from cmk.agent_based.v2 import (
     Metric,
     Result,
     Service,

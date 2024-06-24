@@ -3,7 +3,7 @@
 #
 # dnos_cpu - Dell Networking OS Temperature Check for Checkmk
 #
-# Copyright (C) 2023  Marius Rieder <marius.rieder@scs.ch>
+# Copyright (C) 2023-2024  Marius Rieder <marius.rieder@scs.ch>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,17 +30,20 @@
 
 from typing import Optional, List
 
-from cmk.base.plugins.agent_based.agent_based_api.v1 import (
+from cmk.agent_based.v2 import (
+    CheckPlugin,
+    DiscoveryResult,
     get_value_store,
     OIDEnd,
-    register,
     Service,
+    SimpleSNMPSection,
+    SNMPSection,
     SNMPTree,
     startswith,
     State,
+    StringTable,
 )
-from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import DiscoveryResult, StringTable
-from cmk.base.plugins.agent_based.utils.temperature import check_temperature, TempParamType
+from cmk.plugins.lib.temperature import check_temperature, TempParamType
 
 DevStatusMap = {
     '1': (State.OK, 'normal'),
@@ -59,7 +62,7 @@ def parse_dnos_temp(string_table: StringTable) -> Optional[dict]:
     return {f"Unit {s[0]} Sensor {s[1]}": (int(s[3]), DevStatusMap.get(s[2], (State.UNKNOWN, 'unknown'))) for s in string_table}
 
 
-register.snmp_section(
+snmp_section_dnos_temp = SimpleSNMPSection(
     name = "dnos_temp",
     parse_function=parse_dnos_temp,
     fetch = SNMPTree(
@@ -85,7 +88,7 @@ def parse_dnos10_temp(string_table: List[StringTable]) -> Optional[dict]:
     return temp
 
 
-register.snmp_section(
+snmp_section_dnos10_temp = SNMPSection(
     name = "dnos10_temp",
     parse_function=parse_dnos10_temp,
     fetch = [
@@ -126,7 +129,7 @@ def check_dnos_temp(item: str, params: TempParamType, section: dict):
     )
 
 
-register.check_plugin(
+check_plugin_dnos_temp = CheckPlugin(
     name="dnos_temp",
     service_name="Temperature %s",
     discovery_function=discovery_dnos_temp,
@@ -147,7 +150,7 @@ def check_dnos10_temp(item: str, params: TempParamType, section: dict):
     )
 
 
-register.check_plugin(
+check_plugin_dnos10_temp = CheckPlugin(
     name="dnos10_temp",
     service_name="Temperature %s",
     discovery_function=discovery_dnos_temp,

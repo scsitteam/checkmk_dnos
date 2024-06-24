@@ -3,7 +3,7 @@
 #
 # dnos_cpu - Dell Networking OS Memory Check for Checkmk
 #
-# Copyright (C) 2023  Marius Rieder <marius.rieder@scs.ch>
+# Copyright (C) 2023-2024  Marius Rieder <marius.rieder@scs.ch>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,13 +27,13 @@
 
 from typing import Optional
 
-from cmk.base.plugins.agent_based.agent_based_api.v1 import (
+from cmk.agent_based.v2 import (
     exists,
-    register,
+    SimpleSNMPSection,
     SNMPTree,
+    StringTable,
 )
-from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTable
-from cmk.base.plugins.agent_based.utils.memory import SectionMemUsed
+from cmk.plugins.lib.memory import SectionMemUsed
 
 
 def parse_dnos_mem(string_table: StringTable) -> Optional[SectionMemUsed]:
@@ -46,7 +46,7 @@ def parse_dnos_mem(string_table: StringTable) -> Optional[SectionMemUsed]:
     return section
 
 
-register.snmp_section(
+snmp_section_dnos_mem = SimpleSNMPSection(
     name = "dnos_mem",
     parse_function=parse_dnos_mem,
     parsed_section_name="mem_used",

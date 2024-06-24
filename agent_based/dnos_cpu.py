@@ -3,7 +3,7 @@
 #
 # dnos_cpu - Dell Networking OS CPU Load Check for Checkmk
 #
-# Copyright (C) 2023  Marius Rieder <marius.rieder@scs.ch>
+# Copyright (C) 2023-2024  Marius Rieder <marius.rieder@scs.ch>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -29,9 +29,13 @@
 
 from typing import Optional
 
-from cmk.base.plugins.agent_based.agent_based_api.v1 import exists, register, SNMPTree
-from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import StringTable
-from cmk.base.plugins.agent_based.utils.cpu import Load, Section
+from cmk.agent_based.v2 import (
+    exists,
+    SNMPTree,
+    StringTable,
+    SimpleSNMPSection,
+)
+from cmk.plugins.lib.cpu import Load, Section
 
 
 def parse_dnos_cpu(string_table: StringTable) -> Optional[Section]:
@@ -47,7 +51,7 @@ def parse_dnos_cpu(string_table: StringTable) -> Optional[Section]:
     )
 
 
-register.snmp_section(
+snmp_section_dnos_cpu = SimpleSNMPSection(
     name = "dnos_cpu",
     parse_function=parse_dnos_cpu,
     parsed_section_name="cpu",
