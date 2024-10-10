@@ -20,7 +20,7 @@
     },
     'name': 'dnos',
     'title': u'Dell Networking OS Switch Checks',
-    'version': '0.3.1',
+    'version': '0.3.2',
     'version.min_required': '2.3.0p3',
     'version.packaged': '2.3.0',
     'version.usable_until': '2.4.0',
