@@ -42,7 +42,7 @@ class CheckDNOSCommit(object):
                 return 0
             else:
                 print("WARNING: running config differs from startup config")
-                for line in difflib.unified_diff(self.startup_config.splitlines(), self.running_config.splitlines(), fromfile='startup-config', tofile='running-config'):
+                for line in difflib.unified_diff(self.startup_config, self.running_config, fromfile='startup-config', tofile='running-config'):
                     print(line.rstrip())
                 return 1
         except Exception as e:
