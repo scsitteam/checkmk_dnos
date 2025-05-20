@@ -22,7 +22,7 @@
 
 import pytest  # type: ignore[import]
 from cmk.plugins.lib.cpu import Load, Section
-from cmk.base.plugins.agent_based import dnos_cpu
+from cmk_addons.plugins.dnos.agent_based import dnos_cpu
 
 
 @pytest.mark.parametrize('string_table, result', [

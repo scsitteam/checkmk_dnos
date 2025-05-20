@@ -21,7 +21,7 @@
 #
 
 import pytest  # type: ignore[import]
-from cmk.base.plugins.agent_based import dnos_mem
+from cmk_addons.plugins.dnos.agent_based import dnos_mem
 
 
 @pytest.mark.parametrize('string_table, result', [

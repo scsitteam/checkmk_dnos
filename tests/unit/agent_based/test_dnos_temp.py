@@ -27,7 +27,7 @@ from cmk.agent_based.v2 import (
     Service,
     State,
 )
-from cmk.base.plugins.agent_based import dnos_temp
+from cmk_addons.plugins.dnos.agent_based import dnos_temp
 
 
 def get_value_store():
