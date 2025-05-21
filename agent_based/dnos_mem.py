@@ -57,5 +57,5 @@ snmp_section_dnos_mem = SimpleSNMPSection(
             '2',  # DNOS-SWITCHING-MIB::agentSwitchCpuProcessMemAvailable
         ],
     ),
-    detect=exists(".1.3.6.1.4.1.674.10895.5000.2.6132.1.1.1.1.4.1.0"),
+    detect=exists(".1.3.6.1.4.1.674.10895.5000.2.6132.1.1.1.1.4.1.*"),
 )

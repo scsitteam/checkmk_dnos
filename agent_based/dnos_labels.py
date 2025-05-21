@@ -65,7 +65,7 @@ snmp_section_dnos_agentinventory = SimpleSNMPSection(
             '13',  # DNOS-SWITCHING-MIB::agentInventorySoftwareVersion
         ],
     ),
-    detect=exists(".1.3.6.1.4.1.674.10895.5000.2.6132.1.1.1.1.1.3.0"),
+    detect=exists(".1.3.6.1.4.1.674.10895.5000.2.6132.1.1.1.1.1.3.*"),
 )
 
 
