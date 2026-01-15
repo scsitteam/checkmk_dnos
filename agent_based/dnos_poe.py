@@ -95,7 +95,7 @@ def discover_dnos_poe(
         return
     for port in section_dnos_poe:
         if port.power > 0:
-            item = next((i.attributes.descr for i in section_if64.interfaces if i.attributes.index == port.index), port.index)
+            item = next((i.attributes.descr for i in section_if64 if i.attributes.index == port.index), port.index)
             yield Service(item=item)
 
 
@@ -106,12 +106,12 @@ def check_dnos_poe(
 ) -> CheckResult:
     if section_dnos_poe is None:
         return
-    item = next((i.attributes.index for i in section_if64.interfaces if i.attributes.descr == item), item)
+    item = next((i.attributes.index for i in section_if64 if i.attributes.descr == item), item)
     for port in section_dnos_poe:
         if port.index != item:
             continue
 
-        alias = next((i.attributes.alias for i in section_if64.interfaces if i.attributes.index == item), None)
+        alias = next((i.attributes.alias for i in section_if64 if i.attributes.index == item), None)
         if alias:
             yield Result(state=State.OK, summary=f"[{alias}]")
 
